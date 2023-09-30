@@ -1,0 +1,18 @@
+// $theme:#FFA45B; // 不知道为什么用不了变量？？？求修正
+
+.g-ellipsis{
+	  display: -webkit-box !important;
+	  -webkit-box-orient: vertical;
+	  -webkit-line-clamp: 2;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+}
+
+.g-bg-theme{
+	background-color: #4C96CB;
+	color: #FFF;
+}
+
+// .g-text-orange{
+// 	color: #FFA45B;
+// }
