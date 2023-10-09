@@ -1,0 +1,29 @@
+# Windows
+[Dd]esktop.ini
+Thumbs.db
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+
+# 自定义
+node_modules/
+cloudfunctions/
+cloudfunctionTemplate/
+.vscode/
+unpackage/
+hbuilderx/
+
+
+# project.config.json
+# aa/: 忽略aa目录下的所有文件
+# bb: 忽略bb文件
+# *.a: 忽略以.a结尾的文件
+# !cc.txt: 除了cc.txt文件
+# .gitignore
+
+.hbuilderx/launch.json
