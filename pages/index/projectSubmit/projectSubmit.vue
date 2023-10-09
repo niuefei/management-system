@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="tabs">
-			<view class="tabls_item" v-for="(item,index) in tabs" :key="item.id" :class="item.isActive?'active':''" @click="handleTabe(item.id)">
+			<view class="tabls_item" v-for="(item) in tabs" :key="item.id" :class="item.isActive?'active':''" @click="handleTabe(item.id)">
 				{{item.text}}
 			</view>
 		</view>
