@@ -40,16 +40,16 @@ export function request(options) {
 			options.url = baseUrl + options.url
 
 		// 调用原生的请求
-		let header = {
+		let header = {
 			// 'content-type': 'application/x-www-form-urlencoded'
 			'content-type':options.contentType
 			// 'content-type':'application/json'
 		}
 		// console.log(this.globalData.settings.cookie)
 		
-        if (this.globalData.settings && this.globalData.settings.cookie) {
-            header.cookie = this.globalData.settings.cookie
-        }
+		if (this.globalData.settings && this.globalData.settings.cookie) {
+			header.cookie = this.globalData.settings.cookie
+		}
 
 		uni.request({
 			header,

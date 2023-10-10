@@ -78,14 +78,14 @@
 		},
 
 		onLoad() {
-			this._updateMsg(true)
-			this.onRead()
+			// this._updateMsg(true)
+			// this.onRead()
 			
-			// 接收消息
-			uni.$on('onSocketMsg', res => {
-				if(res.fromUser == this.chatWith.id)
-					this._updateMsg(true)
-			})
+			// // 接收消息
+			// uni.$on('onSocketMsg', res => {
+			// 	if(res.fromUser == this.chatWith.id)
+			// 		this._updateMsg(true)
+			// })
 		},
 		
 		onUnload() {
@@ -94,124 +94,124 @@
 
 		methods: {
 
-			// 更新消息
-			_updateMsg(toBottom = false) {
-				this.request({
-					url: '/chat/selectHistory',
-					method: 'POST',
-					data: {
-						uid: this.chatWith.id
-					}
-				}).then(res => {
-					this.msgLi = res.data.reverse()
-					if (toBottom) {
-						setTimeout(() => {
-							uni.pageScrollTo({
-								scrollTop: 10000000
-							})
-						}, 200);
-					}
-				})
-			},
+			// // 更新消息
+			// _updateMsg(toBottom = false) {
+			// 	this.request({
+			// 		url: '/chat/selectHistory',
+			// 		method: 'POST',
+			// 		data: {
+			// 			uid: this.chatWith.id
+			// 		}
+			// 	}).then(res => {
+			// 		this.msgLi = res.data.reverse()
+			// 		if (toBottom) {
+			// 			setTimeout(() => {
+			// 				uni.pageScrollTo({
+			// 					scrollTop: 10000000
+			// 				})
+			// 			}, 200);
+			// 		}
+			// 	})
+			// },
 
-			// 标为已读
-			onRead() {
-				// 消除未读消息
-				if (this.chatWith.unReadNum > 0) {
-					// 远端消除
-					this.request({
-						url: '/chat/changeAllRead',
-						method: 'POST',
-						data: {
-							uid: this.chatWith.id,
-						}
-					})
+			// // 标为已读
+			// onRead() {
+			// 	// 消除未读消息
+			// 	if (this.chatWith.unReadNum > 0) {
+			// 		// 远端消除
+			// 		this.request({
+			// 			url: '/chat/changeAllRead',
+			// 			method: 'POST',
+			// 			data: {
+			// 				uid: this.chatWith.id,
+			// 			}
+			// 		})
 
-					// 本地消除 没有unReadNum
-					this.globalData.unReadMsgCount -= this.chatWith.unReadNum
-					this.chatWith.unReadNum = 0
-					const pages = getCurrentPages()
-					const prePage = pages[pages.length - 2]
-					console.log(prePage.$vm.MessageList)
-					for(let i = 0; i<prePage.$vm.MessageList.length; i++){
-						if(prePage.$vm.MessageList[i].id == this.chatWith.id)
-						prePage.$vm.MessageList[i].unReadNum = 0
-					}
-				}
-			},
+			// 		// 本地消除 没有unReadNum
+			// 		this.globalData.unReadMsgCount -= this.chatWith.unReadNum
+			// 		this.chatWith.unReadNum = 0
+			// 		const pages = getCurrentPages()
+			// 		const prePage = pages[pages.length - 2]
+			// 		console.log(prePage.$vm.MessageList)
+			// 		for(let i = 0; i<prePage.$vm.MessageList.length; i++){
+			// 			if(prePage.$vm.MessageList[i].id == this.chatWith.id)
+			// 			prePage.$vm.MessageList[i].unReadNum = 0
+			// 		}
+			// 	}
+			// },
 
-			/**发送消息 */
-			onSendMsg(e) {
-				const msg = e.detail.value.msg
-				if (!msg) {
-					uni.showToast({
-						title: '内容不能为空',
-						icon: 'none'
-					})
-					return
-				}
+			// /**发送消息 */
+			// onSendMsg(e) {
+			// 	const msg = e.detail.value.msg
+			// 	if (!msg) {
+			// 		uni.showToast({
+			// 			title: '内容不能为空',
+			// 			icon: 'none'
+			// 		})
+			// 		return
+			// 	}
 
-				this._sendSocketMsg(msg)
-					.then((res) => {
-						if (res[0] === null) {
-							this._setLocalMsg(msg)
-							this.inputVal = ''}
-					})
-			},
+			// 	this._sendSocketMsg(msg)
+			// 		.then((res) => {
+			// 			if (res[0] === null) {
+			// 				this._setLocalMsg(msg)
+			// 				this.inputVal = ''}
+			// 		})
+			// },
 
-			/**发送本地消息 */
-			_setLocalMsg(msg) {
-				this.msgLi = this.msgLi.concat({
-					message: msg,
-					fromUser: this.globalData.settings.wxInfo.id
-				})
-				// this.inputVal == ' '
-				this.inputVal == ''
+			// /**发送本地消息 */
+			// _setLocalMsg(msg) {
+			// 	this.msgLi = this.msgLi.concat({
+			// 		message: msg,
+			// 		fromUser: this.globalData.settings.wxInfo.id
+			// 	})
+			// 	// this.inputVal == ' '
+			// 	this.inputVal == ''
 
-				// 使页面滚动到底部
-				setTimeout(() => {
-					uni.pageScrollTo({
-						scrollTop: 10000000
-					})
-				}, 100);
-			},
+			// 	// 使页面滚动到底部
+			// 	setTimeout(() => {
+			// 		uni.pageScrollTo({
+			// 			scrollTop: 10000000
+			// 		})
+			// 	}, 100);
+			// },
 
-			onInputting(e) {
-				this.inputVal = e.detail.value
-			},
+			// onInputting(e) {
+			// 	this.inputVal = e.detail.value
+			// },
 
-			/**聚焦调高度 */
-			onInputFocus(e) {
-				this.InputBottom = e.detail.height
-			},
+			// /**聚焦调高度 */
+			// onInputFocus(e) {
+			// 	this.InputBottom = e.detail.height
+			// },
 
-			/**失焦调高度 */
-			onInputBlur(e) {
-				this.InputBottom = 0
-			},
+			// /**失焦调高度 */
+			// onInputBlur(e) {
+			// 	this.InputBottom = 0
+			// },
 
-			/**稍后开放 */
-			onOpenLater() {
-				uni.showToast({
-					title: '稍后开放',
-					icon: 'none'
-				})
-			},
+			// /**稍后开放 */
+			// onOpenLater() {
+			// 	uni.showToast({
+			// 		title: '稍后开放',
+			// 		icon: 'none'
+			// 	})
+			// },
 
-			/**发送网络消息 */
-			_sendSocketMsg(msg) {
-				return uni.sendSocketMessage({
-					data: JSON.stringify({
-						message: msg,
-						toUser: this.chatWith.id,
-						// 测试给自己发消息
-						// toUser: 1
-					})
-				}).then(res => {
-					console.log(res[1])
-					return res
-				})
-			}
+			// /**发送网络消息 */
+			// _sendSocketMsg(msg) {
+			// 	return uni.sendSocketMessage({
+			// 		data: JSON.stringify({
+			// 			message: msg,
+			// 			toUser: this.chatWith.id,
+			// 			// 测试给自己发消息
+			// 			// toUser: 1
+			// 		})
+			// 	}).then(res => {
+			// 		console.log(res[1])
+			// 		return res
+			// 	})
+			// }
 		}
 	}
 </script>
