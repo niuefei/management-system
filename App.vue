@@ -33,7 +33,8 @@
 			// #ifdef MP-WEIXIN
 			this._setOpenid()
 				.then(() => {
-					this._setChat();
+					// 关闭socket
+					// this._setChat();
 				});
 			// #endif
 
@@ -121,84 +122,84 @@
 			},
 
 
-			/**开启socket聊天相关功能 */
-			_setChat() {
-				// 开启聊天功能
-				const cookie = Vue.prototype.globalData.settings.cookie;
-				uni.connectSocket({
-					header: {
-						cookie
-					},
-					url: `ws://106.53.116.162:8080/chat`
-				}).then(res => {
-					//console.log(res,'开启连接')
-				});
+			// /**开启socket聊天相关功能 */
+			// _setChat() {
+			// 	// 开启聊天功能
+			// 	const cookie = Vue.prototype.globalData.settings.cookie;
+			// 	uni.connectSocket({
+			// 		header: {
+			// 			cookie
+			// 		},
+			// 		url: `ws://106.53.116.162:8080/chat`
+			// 	}).then(res => {
+			// 		//console.log(res,'开启连接')
+			// 	});
 
-				// 定时聊天心跳检测
-				setInterval(() => {
-					// console.log('心跳检测socket')
-					uni.sendSocketMessage({
-						data: JSON.stringify({
-							msg: {
-								type: 'heartbeat'
-							}
-						})
-					}).then(res => {
-						if (res[0] !== null) {
-							console.log(res, 1)
-							uni.connectSocket({
-								header: {
-									cookie: cookie
-								},
-								url: `ws://106.53.116.162:8080/chat`
-							}).then(res => {
-								// console.log(res[1],'重连socket');
-							});
-						}
-					});
-				}, 40000);
+			// 	// 定时聊天心跳检测
+			// 	setInterval(() => {
+			// 		// console.log('心跳检测socket')
+			// 		uni.sendSocketMessage({
+			// 			data: JSON.stringify({
+			// 				msg: {
+			// 					type: 'heartbeat'
+			// 				}
+			// 			})
+			// 		}).then(res => {
+			// 			if (res[0] !== null) {
+			// 				console.log(res, 1)
+			// 				uni.connectSocket({
+			// 					header: {
+			// 						cookie: cookie
+			// 					},
+			// 					url: `ws://106.53.116.162:8080/chat`
+			// 				}).then(res => {
+			// 					// console.log(res[1],'重连socket');
+			// 				});
+			// 			}
+			// 		});
+			// 	}, 40000);
 
 
-				uni.onSocketClose(() => {
-					uni.connectSocket({
-						header: {
-							cookie
-						},
-						url: `ws://106.53.116.162:8080/chat`
-					}).then(res => {
-						// console.log('重连socket', res);
-					});
-				})
+			// 	uni.onSocketClose(() => {
+			// 		uni.connectSocket({
+			// 			header: {
+			// 				cookie
+			// 			},
+			// 			url: `ws://106.53.116.162:8080/chat`
+			// 		}).then(res => {
+			// 			// console.log('重连socket', res);
+			// 		});
+			// 	})
 
-				uni.onSocketMessage(res => {
-					Vue.prototype.globalData.unReadMsgCount++
-					const resp = JSON.parse(res.data);
-					Vue.prototype.globalData.unReadMsgLi.push(resp)
-					// 发送全局信号 此时收到消息 resp为消息内容
-					uni.$emit('onSocketMsg', resp);
-					console.log(resp)
-					if (Vue.prototype.globalData.chatWith.id !== resp.fromUser ) {
-						uni.showToast({
-							title: `用户id为 ${resp.fromUser} 的人发来一条消息`,
-							icon: 'none'
-						});
-						uni.setTabBarBadge({
-							index: 2,
-							text: Vue.prototype.globalData.unReadMsgCount.toString()
-						});
-					}
+			// 	uni.onSocketMessage(res => {
+			// 		Vue.prototype.globalData.unReadMsgCount++
+			// 		const resp = JSON.parse(res.data);
+			// 		Vue.prototype.globalData.unReadMsgLi.push(resp)
+			// 		// 发送全局信号 此时收到消息 resp为消息内容
+			// 		uni.$emit('onSocketMsg', resp);
+			// 		console.log(resp)
+			// 		if (Vue.prototype.globalData.chatWith.id !== resp.fromUser ) {
+			// 			uni.showToast({
+			// 				title: `用户id为 ${resp.fromUser} 的人发来一条消息`,
+			// 				icon: 'none'
+			// 			});
+			// 			uni.setTabBarBadge({
+			// 				index: 2,
+			// 				text: Vue.prototype.globalData.unReadMsgCount.toString()
+			// 			});
+			// 		}
 
-					// // 设置未读消息数
-					// if (resp.uid === 'system' && resp.msg.type === 'online') {
-					// 	this.globalData.unReadMsgCount = resp.unreadNum;
-					// 	if (this.globalData.unReadMsgCount > 0)
-					// 		uni.setTabBarBadge({
-					// 			index: 3,
-					// 			text: this.globalData.unReadMsgCount.toString()
-					// 		});
-					// }
-				});
-			}
+			// 		// // 设置未读消息数
+			// 		// if (resp.uid === 'system' && resp.msg.type === 'online') {
+			// 		// 	this.globalData.unReadMsgCount = resp.unreadNum;
+			// 		// 	if (this.globalData.unReadMsgCount > 0)
+			// 		// 		uni.setTabBarBadge({
+			// 		// 			index: 3,
+			// 		// 			text: this.globalData.unReadMsgCount.toString()
+			// 		// 		});
+			// 		// }
+			// 	});
+			// }
 		}
 	};
 </script>
